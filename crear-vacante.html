@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Crear Vacante | WorkMatch AI</title>
+
+    <link rel="stylesheet" href="css/estilos.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<div class="contenedor">
+
+
+    <!-- MENU LATERAL -->
+
+
+    <aside class="sidebar">
+
+
+        <div class="logo">
+
+            <h2>WorkMatch AI</h2>
+
+        </div>
+
+
+
+        <ul>
+
+
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-home"></i> Panel
+                </a>
+            </li>
+
+
+            <li>
+                <a href="perfil-empresa.html">
+                    <i class="fas fa-building"></i> Perfil Empresarial
+                </a>
+            </li>
+
+
+            <li>
+                <a href="crear-vacante.html">
+                    <i class="fas fa-plus-circle"></i> Crear Vacante
+                </a>
+            </li>
+
+
+            <li>
+                <a href="consultar-vacantes.html">
+                    <i class="fas fa-list"></i> Consultar Vacantes
+                </a>
+            </li>
+
+
+            <li>
+                <a href="modificar-vacante.html">
+                    <i class="fas fa-pen"></i> Modificar Vacantes
+                </a>
+            </li>
+
+
+            <li>
+                <a href="eliminar-vacante.html">
+                    <i class="fas fa-trash"></i> Eliminar Vacantes
+                </a>
+            </li>
+
+
+            <li>
+                <a href="candidatos.html">
+                    <i class="fas fa-users"></i> Gestión de Candidatos
+                </a>
+            </li>
+
+
+            <li>
+                <a href="reportes.html">
+                    <i class="fas fa-chart-bar"></i> Reportes
+                </a>
+            </li>
+
+
+        </ul>
+
+
+    </aside>
+
+
+
+
+
+    <!-- CONTENIDO -->
+
+
+    <main class="content">
+
+
+        <header>
+
+
+            <h1 class="page-title">
+                Crear Nueva Vacante
+            </h1>
+
+
+
+            <div class="usuario">
+
+                <i class="fas fa-user-circle"></i>
+
+                Empresa Demo
+
+            </div>
+
+
+        </header>
+
+
+
+
+
+        <section class="card">
+
+
+            <form id="vacanteForm">
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Nombre del Puesto
+                    </label>
+
+                    <input 
+                    type="text"
+                    class="form-control"
+                    placeholder="Ej: Desarrollador Front-End">
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Área
+                    </label>
+
+                    <select class="form-select">
+
+                        <option>Tecnología</option>
+                        <option>Recursos Humanos</option>
+                        <option>Ventas</option>
+                        <option>Finanzas</option>
+                        <option>Marketing</option>
+
+                    </select>
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Modalidad
+                    </label>
+
+                    <select class="form-select">
+
+                        <option>Remoto</option>
+                        <option>Híbrido</option>
+                        <option>Presencial</option>
+
+                    </select>
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Tipo de Contrato
+                    </label>
+
+                    <select class="form-select">
+
+                        <option>Tiempo Completo</option>
+                        <option>Medio Tiempo</option>
+                        <option>Temporal</option>
+                        <option>Práctica Profesional</option>
+
+                    </select>
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Salario
+                    </label>
+
+                    <input 
+                    type="number"
+                    class="form-control"
+                    placeholder="₡900000">
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Provincia
+                    </label>
+
+                    <select class="form-select">
+
+                        <option>San José</option>
+                        <option>Alajuela</option>
+                        <option>Cartago</option>
+                        <option>Heredia</option>
+                        <option>Puntarenas</option>
+                        <option>Limón</option>
+                        <option>Guanacaste</option>
+
+                    </select>
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Años de Experiencia
+                    </label>
+
+                    <input 
+                    type="number"
+                    class="form-control">
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Nivel Académico
+                    </label>
+
+                    <select class="form-select">
+
+                        <option>Bachillerato</option>
+                        <option>Diplomado</option>
+                        <option>Licenciatura</option>
+                        <option>Maestría</option>
+
+                    </select>
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Habilidades Requeridas
+                    </label>
+
+                    <input 
+                    type="text"
+                    class="form-control"
+                    placeholder="HTML, CSS, JavaScript">
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Descripción del Puesto
+                    </label>
+
+                    <textarea 
+                    class="form-control"
+                    rows="6"></textarea>
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Requisitos
+                    </label>
+
+                    <textarea 
+                    class="form-control"
+                    rows="6"></textarea>
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Beneficios
+                    </label>
+
+                    <textarea 
+                    class="form-control"
+                    rows="4"></textarea>
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+                    <label>
+                        Fecha Límite
+                    </label>
+
+                    <input 
+                    type="date"
+                    class="form-control">
+
+                </div>
+
+
+
+
+
+                <button class="btn btn-success">
+
+
+                    <i class="fas fa-paper-plane"></i>
+
+                    Publicar Vacante
+
+
+                </button>
+
+
+
+            </form>
+
+
+        </section>
+
+
+
+
+
+        <footer>
+
+            © 2026 WorkMatch AI
+
+        </footer>
+
+
+
+    </main>
+
+
+
+</div>
+
+
+
+
+<script src="js/script.js"></script>
+
+
+</body>
+
+
+</html>

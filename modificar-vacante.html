@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Modificar Vacante | WorkMatch AI</title>
+
+    <link rel="stylesheet" href="css/estilos.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<div class="contenedor">
+
+
+    <!-- MENU LATERAL -->
+
+    <aside class="sidebar">
+
+
+        <div class="logo">
+
+            <h2>WorkMatch AI</h2>
+
+        </div>
+
+
+
+        <ul>
+
+
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-home"></i> Panel
+                </a>
+            </li>
+
+
+            <li>
+                <a href="perfil-empresa.html">
+                    <i class="fas fa-building"></i> Perfil Empresarial
+                </a>
+            </li>
+
+
+            <li>
+                <a href="crear-vacante.html">
+                    <i class="fas fa-plus-circle"></i> Crear Vacante
+                </a>
+            </li>
+
+
+            <li>
+                <a href="consultar-vacantes.html">
+                    <i class="fas fa-list"></i> Consultar Vacantes
+                </a>
+            </li>
+
+
+            <li>
+                <a href="modificar-vacante.html">
+                    <i class="fas fa-pen"></i> Modificar Vacante
+                </a>
+            </li>
+
+
+            <li>
+                <a href="eliminar-vacante.html">
+                    <i class="fas fa-trash"></i> Eliminar Vacante
+                </a>
+            </li>
+
+
+            <li>
+                <a href="candidatos.html">
+                    <i class="fas fa-users"></i> Gestión de Candidatos
+                </a>
+            </li>
+
+
+            <li>
+                <a href="reportes.html">
+                    <i class="fas fa-chart-bar"></i> Reportes
+                </a>
+            </li>
+
+
+        </ul>
+
+
+    </aside>
+
+
+
+
+
+    <!-- CONTENIDO -->
+
+
+    <main class="content">
+
+
+        <header>
+
+
+            <h1 class="page-title">
+                Modificar Vacante
+            </h1>
+
+
+
+            <div class="usuario">
+
+                <i class="fas fa-user-circle"></i>
+
+                Empresa Demo
+
+            </div>
+
+
+        </header>
+
+
+
+
+
+        <section class="card">
+
+
+            <form id="editarVacante">
+
+
+                <div class="mb-3">
+
+
+                    <label>
+                        Puesto
+                    </label>
+
+
+                    <input 
+                    type="text" 
+                    class="form-control"
+                    value="Desarrollador Front-End">
+
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+
+                    <label>
+                        Área
+                    </label>
+
+
+                    <input 
+                    type="text"
+                    class="form-control"
+                    value="Tecnología">
+
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+
+                    <label>
+                        Modalidad
+                    </label>
+
+
+                    <select class="form-select">
+
+
+                        <option selected>
+                            Remoto
+                        </option>
+
+
+                        <option>
+                            Híbrido
+                        </option>
+
+
+                        <option>
+                            Presencial
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+
+                    <label>
+                        Salario
+                    </label>
+
+
+                    <input 
+                    type="number"
+                    class="form-control"
+                    value="1200000">
+
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+
+                    <label>
+                        Experiencia (años)
+                    </label>
+
+
+                    <input 
+                    type="number"
+                    class="form-control"
+                    value="2">
+
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+
+                    <label>
+                        Estado
+                    </label>
+
+
+                    <select class="form-select">
+
+
+                        <option selected>
+                            Activa
+                        </option>
+
+
+                        <option>
+                            Cerrada
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+
+                    <label>
+                        Descripción
+                    </label>
+
+
+                    <textarea 
+                    class="form-control"
+                    rows="6">Buscamos un desarrollador Front-End con experiencia en HTML, CSS, JavaScript y Bootstrap.</textarea>
+
+
+                </div>
+
+
+
+
+
+                <div class="mb-3">
+
+
+                    <label>
+                        Requisitos
+                    </label>
+
+
+                    <textarea 
+                    class="form-control"
+                    rows="6">Conocimiento en Git, Responsive Design, consumo de APIs y trabajo en equipo.</textarea>
+
+
+                </div>
+
+
+
+
+
+                <button class="btn btn-success">
+
+
+                    <i class="fas fa-save"></i>
+
+                    Actualizar Vacante
+
+
+                </button>
+
+
+
+            </form>
+
+
+        </section>
+
+
+
+
+        <footer>
+
+            © 2026 WorkMatch AI
+
+        </footer>
+
+
+
+    </main>
+
+
+
+</div>
+
+
+
+
+<script src="js/script.js"></script>
+
+
+</body>
+
+
+</html>

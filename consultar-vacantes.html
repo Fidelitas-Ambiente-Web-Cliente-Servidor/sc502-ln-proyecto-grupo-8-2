@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Consultar Vacantes | WorkMatch AI</title>
+
+    <link rel="stylesheet" href="css/estilos.css">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<div class="contenedor">
+
+
+    <!-- MENU LATERAL -->
+
+
+    <aside class="sidebar">
+
+
+        <div class="logo">
+
+            <h2>WorkMatch AI</h2>
+
+        </div>
+
+
+
+        <ul>
+
+
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-home"></i> Panel
+                </a>
+            </li>
+
+
+            <li>
+                <a href="perfil-empresa.html">
+                    <i class="fas fa-building"></i> Perfil Empresarial
+                </a>
+            </li>
+
+
+            <li>
+                <a href="crear-vacante.html">
+                    <i class="fas fa-plus-circle"></i> Crear Vacante
+                </a>
+            </li>
+
+
+            <li>
+                <a href="consultar-vacantes.html">
+                    <i class="fas fa-list"></i> Consultar Vacantes
+                </a>
+            </li>
+
+
+            <li>
+                <a href="modificar-vacante.html">
+                    <i class="fas fa-edit"></i> Modificar Vacantes
+                </a>
+            </li>
+
+
+            <li>
+                <a href="eliminar-vacante.html">
+                    <i class="fas fa-trash"></i> Eliminar Vacantes
+                </a>
+            </li>
+
+
+            <li>
+                <a href="candidatos.html">
+                    <i class="fas fa-users"></i> Gestión de Candidatos
+                </a>
+            </li>
+
+
+            <li>
+                <a href="reportes.html">
+                    <i class="fas fa-chart-bar"></i> Reportes
+                </a>
+            </li>
+
+
+        </ul>
+
+
+    </aside>
+
+
+
+
+
+    <!-- CONTENIDO -->
+
+
+    <main class="content">
+
+
+        <header>
+
+
+            <h1 class="page-title">
+                Consultar Vacantes
+            </h1>
+
+
+
+            <div class="usuario">
+
+                <i class="fas fa-user-circle"></i>
+
+                Empresa Demo
+
+            </div>
+
+
+        </header>
+
+
+
+
+
+        <!-- BUSQUEDA -->
+
+
+        <section class="card">
+
+
+            <input 
+            type="text"
+            id="buscarVacante"
+            class="form-control"
+            placeholder="Buscar vacante...">
+
+
+            <br>
+
+
+            <button class="btn btn-primary" id="btnBuscar">
+
+
+                <i class="fas fa-search"></i>
+
+                Buscar
+
+
+            </button>
+
+
+        </section>
+
+
+
+
+
+
+        <!-- TABLA -->
+
+
+        <section class="card">
+
+
+            <table class="table table-hover">
+
+
+                <thead>
+
+
+                    <tr>
+
+                        <th>Puesto</th>
+
+                        <th>Modalidad</th>
+
+                        <th>Salario</th>
+
+                        <th>Estado</th>
+
+                        <th>Fecha</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+
+                </thead>
+
+
+
+
+                <tbody id="tablaVacantes">
+
+
+                    <tr>
+
+
+                        <td>
+                            Desarrollador Java
+                        </td>
+
+
+                        <td>
+                            Remoto
+                        </td>
+
+
+                        <td>
+                            ₡1 200 000
+                        </td>
+
+
+                        <td>
+                            Activa
+                        </td>
+
+
+                        <td>
+                            05/07/2026
+                        </td>
+
+
+                        <td>
+
+
+                            <button class="btn btn-warning">
+
+                                <i class="fas fa-edit"></i>
+
+                                Editar
+
+                            </button>
+
+
+
+                            <button class="btn btn-danger">
+
+                                <i class="fas fa-trash"></i>
+
+                                Eliminar
+
+                            </button>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+
+
+
+                    <tr>
+
+
+                        <td>
+                            Diseñador UX/UI
+                        </td>
+
+
+                        <td>
+                            Híbrido
+                        </td>
+
+
+                        <td>
+                            ₡900 000
+                        </td>
+
+
+                        <td>
+                            Activa
+                        </td>
+
+
+                        <td>
+                            04/07/2026
+                        </td>
+
+
+                        <td>
+
+
+                            <button class="btn btn-warning">
+
+                                <i class="fas fa-edit"></i>
+
+                                Editar
+
+                            </button>
+
+
+
+                            <button class="btn btn-danger">
+
+                                <i class="fas fa-trash"></i>
+
+                                Eliminar
+
+                            </button>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+
+
+
+                    <tr>
+
+
+                        <td>
+                            QA Tester
+                        </td>
+
+
+                        <td>
+                            Presencial
+                        </td>
+
+
+                        <td>
+                            ₡850 000
+                        </td>
+
+
+                        <td>
+                            Cerrada
+                        </td>
+
+
+                        <td>
+                            29/06/2026
+                        </td>
+
+
+                        <td>
+
+
+                            <button class="btn btn-warning">
+
+                                <i class="fas fa-edit"></i>
+
+                                Editar
+
+                            </button>
+
+
+
+                            <button class="btn btn-danger">
+
+                                <i class="fas fa-trash"></i>
+
+                                Eliminar
+
+                            </button>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </section>
+
+
+
+
+
+        <footer>
+
+            © 2026 WorkMatch AI
+
+        </footer>
+
+
+
+    </main>
+
+
+
+</div>
+
+
+
+
+<script src="js/script.js"></script>
+
+
+</body>
+
+
+</html>
