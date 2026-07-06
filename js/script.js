@@ -1,7 +1,4 @@
-// ===========================================
-// WorkMatch AI
-// script.js
-// ===========================================
+
 
 // Mostrar mensaje al cargar la página
 document.addEventListener("DOMContentLoaded", function () {
