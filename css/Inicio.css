@@ -1,0 +1,174 @@
+/* ==========================================
+   1. ESTILOS GLOBALES Y BASE
+   ========================================== */
+body {
+    margin: 0;
+    padding: 0;
+    background: #f4f6f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ==========================================
+   2. NAVBAR (BARRA SUPERIOR)
+   ========================================== */
+.navbar {
+    background: #0d6efd;
+}
+
+.navbar-brand {
+    color: white !important;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-link {
+    color: white !important;
+    transition: .3s;
+}
+
+.nav-link:hover {
+    color: #dbeafe !important;
+}
+
+/* ==========================================
+   3. SIDEBAR (MENÚ LATERAL PARA DASHBOARD)
+   ========================================== */
+.sidebar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background: #212529;
+    padding-top: 25px;
+    z-index: 1000;
+}
+
+.sidebar h5 {
+    color: white;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 15px 25px;
+    transition: .3s;
+}
+
+.sidebar a:hover {
+    background: #0d6efd;
+    padding-left: 35px;
+}
+
+/* ==========================================
+   4. CONTENEDOR PRINCIPAL
+   ========================================== */
+.content {
+    margin-left: 250px;
+    margin-top: 70px;
+    padding: 30px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #0d6efd;
+    margin-bottom: 30px;
+}
+
+/* ==========================================
+   5. TARJETAS (CARDS)
+   ========================================== */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0,0,0,.12);
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h2 {
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+/* ==========================================
+   6. BOTONES PERSONALIZADOS
+   ========================================== */
+.btn-primary {
+    border-radius: 10px;
+}
+
+.btn-success {
+    border-radius: 10px;
+}
+
+.btn-danger {
+    border-radius: 10px;
+}
+
+.btn-warning {
+    border-radius: 10px;
+}
+
+/* ==========================================
+   7. FORMULARIOS Y VALIDACIÓN (BOOTSTRAP ADAPTADO)
+   ========================================== */
+.form-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Clases de retroalimentación visual al fallar validación */
+.form-control.is-invalid {
+    border-color: #dc3545;
+    background-image: none;
+}
+
+/* ==========================================
+   8. AJUSTES RESPONSIVOS (DISPOSITIVOS MÓVILES)
+   ========================================== */
+@media (max-width: 768px) {
+    /* El sidebar deja de estar fijo a un lado y se acopla arriba */
+    .sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+        height: auto;
+        padding-bottom: 15px;
+    }
+
+    /* El contenido utiliza todo el ancho de la pantalla */
+    .content {
+        margin-left: 0;
+        margin-top: 20px;
+        padding: 15px;
+    }
+    
+    .page-title {
+        font-size: 26px;
+        text-align: center;
+    }
+}
