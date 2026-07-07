@@ -1,0 +1,335 @@
+/* =========================
+   GENERAL
+========================= */
+
+body{
+
+    margin:0;
+
+    background:#f5f7fb;
+
+    font-family:'Segoe UI', Arial, sans-serif;
+
+}
+
+
+.d-flex{
+
+    min-height:100vh;
+
+}
+
+
+
+
+
+/* =========================
+   MENU LATERAL
+========================= */
+
+
+.menu{
+
+    width:260px;
+
+    background:#0d6efd;
+
+    padding:30px 18px;
+
+    box-shadow:4px 0 15px rgba(0,0,0,.12);
+
+}
+
+
+
+.menu h4{
+
+    font-size:24px;
+
+    letter-spacing:.5px;
+
+}
+
+
+
+
+
+.menu a{
+
+    display:flex;
+
+    align-items:center;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:14px 16px;
+
+    margin-bottom:12px;
+
+    border-radius:14px;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+
+
+.menu a:hover{
+
+    background:white;
+
+    color:#0d6efd;
+
+    transform:translateX(5px);
+
+}
+
+
+
+
+
+/* =========================
+   CONTENIDO
+========================= */
+
+
+.contenido{
+
+    flex:1;
+
+    padding:40px;
+
+}
+
+
+
+
+.contenido h2{
+
+    color:#1e293b;
+
+    font-size:32px;
+
+}
+
+
+
+
+
+/* =========================
+   TARJETAS
+========================= */
+
+
+.tarjeta{
+
+    border:none;
+
+    border-radius:20px;
+
+    background:white;
+
+    box-shadow:
+
+    0 6px 20px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+
+
+.tarjeta:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:
+
+    0 15px 30px rgba(0,0,0,.12);
+
+}
+
+
+
+
+.card-body{
+
+    padding:25px;
+
+}
+
+
+
+
+
+/* TARJETAS DE DATOS */
+
+
+.card h5{
+
+    color:#64748b;
+
+    font-weight:600;
+
+}
+
+
+
+.card h2{
+
+    font-size:42px;
+
+    margin-top:10px;
+
+}
+
+
+
+
+
+/* =========================
+   TABLA
+========================= */
+
+
+.table{
+
+    margin-top:20px;
+
+}
+
+
+
+.table thead{
+
+    background:#0d6efd;
+
+    color:white;
+
+}
+
+
+
+.table thead th{
+
+    padding:15px;
+
+}
+
+
+
+.table tbody td{
+
+    padding:15px;
+
+}
+
+
+
+.table tbody tr{
+
+    transition:.2s;
+
+}
+
+
+
+.table tbody tr:hover{
+
+    background:#eef5ff;
+
+}
+
+
+
+
+
+/* =========================
+   BADGES
+========================= */
+
+
+.badge{
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+}
+
+
+
+
+
+/* =========================
+   ANIMACIÓN
+========================= */
+
+
+.contenido{
+
+    animation:mostrar .5s ease;
+
+}
+
+
+
+@keyframes mostrar{
+
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(15px);
+
+    }
+
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:768px){
+
+
+    .menu{
+
+        width:100%;
+
+    }
+
+
+    .d-flex{
+
+        display:block!important;
+
+    }
+
+
+    .contenido{
+
+        padding:20px;
+
+    }
+
+
+}

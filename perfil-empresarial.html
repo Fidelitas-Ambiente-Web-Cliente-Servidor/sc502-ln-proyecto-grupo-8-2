@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Crear Vacante | WorkMatch AI</title>
+    <title>Perfil Empresarial | WorkMatch AI</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -34,21 +34,26 @@
             🏠 Panel
         </a>
 
-        <a href="perfil.html">
+
+        <a href="perfil-empresarial.html">
             🏢 Perfil Empresarial
         </a>
+
 
         <a href="crear-vacante.html">
             ➕ Crear Vacante
         </a>
 
+
         <a href="consultar-vacantes.html">
             📋 Vacantes
         </a>
 
+
         <a href="candidatos.html">
             👥 Candidatos
         </a>
+
 
         <a href="reportes.html">
             📊 Reportes
@@ -60,21 +65,20 @@
 
 
 
-
     <!-- CONTENIDO -->
-
 
     <main class="contenido">
 
 
         <h2 class="fw-bold">
-            Crear Vacante
+            Perfil Empresarial
         </h2>
 
 
         <p class="text-muted">
-            Registra una nueva oportunidad laboral.
+            Actualiza la información general de tu empresa.
         </p>
+
 
 
 
@@ -95,17 +99,18 @@
 
 
                             <label class="form-label">
-                                Nombre del puesto
+                                Nombre de Empresa
                             </label>
 
 
                             <input 
-                            type="text" 
+                            type="text"
                             class="form-control"
-                            placeholder="Ej: Desarrollador Front End">
+                            value="Tech Solutions">
 
 
                         </div>
+
 
 
 
@@ -114,26 +119,14 @@
 
 
                             <label class="form-label">
-                                Área
+                                Correo Empresarial
                             </label>
 
 
-                            <select class="form-select">
-
-                                <option>
-                                    Tecnología
-                                </option>
-
-                                <option>
-                                    Recursos Humanos
-                                </option>
-
-                                <option>
-                                    Administración
-                                </option>
-
-
-                            </select>
+                            <input 
+                            type="email"
+                            class="form-control"
+                            value="contacto@empresa.com">
 
 
                         </div>
@@ -153,14 +146,14 @@
 
 
                             <label class="form-label">
-                                Salario aproximado
+                                Teléfono
                             </label>
 
 
                             <input 
                             type="text"
                             class="form-control"
-                            placeholder="Ej: ₡800000">
+                            value="8888-8888">
 
 
                         </div>
@@ -173,27 +166,14 @@
 
 
                             <label class="form-label">
-                                Modalidad
+                                Ubicación
                             </label>
 
 
-                            <select class="form-select">
-
-
-                                <option>
-                                    Presencial
-                                </option>
-
-                                <option>
-                                    Remoto
-                                </option>
-
-                                <option>
-                                    Híbrido
-                                </option>
-
-
-                            </select>
+                            <input 
+                            type="text"
+                            class="form-control"
+                            value="San José">
 
 
                         </div>
@@ -206,19 +186,18 @@
 
 
 
+
                     <div class="mb-3">
 
 
                         <label class="form-label">
-                            Descripción del puesto
+                            Descripción Empresarial
                         </label>
 
 
                         <textarea 
                         class="form-control"
-                        rows="5"
-                        placeholder="Describe las funciones y requisitos">
-                        </textarea>
+                        rows="5">Empresa dedicada al desarrollo de soluciones tecnológicas y servicios digitales.</textarea>
 
 
                     </div>
@@ -228,33 +207,22 @@
 
 
 
-                    <div class="mb-3">
+                    <div class="text-end">
 
 
-                        <label class="form-label">
-                            Requisitos
-                        </label>
+                        <button 
+                        type="submit"
+                        class="btn btn-primary">
 
 
-                        <textarea 
-                        class="form-control"
-                        rows="3"
-                        placeholder="Ej: Java, SQL, experiencia laboral">
-                        </textarea>
+                            Guardar Cambios
+
+
+                        </button>
 
 
                     </div>
 
-
-
-
-
-
-                    <button class="btn btn-primary">
-
-                        Crear Vacante
-
-                    </button>
 
 
                 </form>
@@ -265,6 +233,8 @@
 
 
         </div>
+
+
 
 
 
