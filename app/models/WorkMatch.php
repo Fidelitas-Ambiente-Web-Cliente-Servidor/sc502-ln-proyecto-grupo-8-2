@@ -23,6 +23,20 @@ class WorkMatch
         return false;
     }
 
+    public function restablecerPassword(string $correo, string $identificacion, string $password): bool
+    {
+        $stmt = $this->connection->prepare('SELECT id FROM usuarios WHERE correo = :correo AND identificacion = :identificacion LIMIT 1');
+        $stmt->execute(['correo' => $correo, 'identificacion' => $identificacion]);
+        $usuario = $stmt->fetch();
+        if (!$usuario) return false;
+
+        $stmt = $this->connection->prepare('UPDATE usuarios SET password = :password WHERE id = :id');
+        return $stmt->execute([
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+            'id' => $usuario['id']
+        ]);
+    }
+
     public function registrar(array $datos): bool
     {
         try {

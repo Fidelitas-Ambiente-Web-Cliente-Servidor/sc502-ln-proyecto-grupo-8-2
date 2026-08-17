@@ -23,6 +23,15 @@ class WorkMatchController
             if($u){ $_SESSION['usuario']=$u; header('Location: index.php'); exit; }
             $_SESSION['mensaje']='Correo o contraseña incorrectos.'; return;
         }
+        if($a==='recuperar_password'){
+            $correo=trim($_POST['correo']??'');
+            $identificacion=trim($_POST['identificacion']??'');
+            $pass=$_POST['password']??'';
+            $conf=$_POST['confirmar']??'';
+            if($pass!==$conf || strlen($pass)<6){ $_SESSION['mensaje']='Las contraseñas deben coincidir y tener al menos 6 caracteres.'; return; }
+            if($this->model->restablecerPassword($correo,$identificacion,$pass)){ $_SESSION['mensaje_ok']='Contraseña restablecida correctamente. Ya puedes iniciar sesión.'; header('Location: index.php'); exit; }
+            $_SESSION['mensaje']='No encontramos un usuario con ese correo e identificación.'; return;
+        }
         if($a==='registro'){
             $pass=$_POST['password']??''; $conf=$_POST['confirmar']??'';
             if($pass!==$conf || strlen($pass)<6){ $_SESSION['mensaje']='Las contraseñas deben coincidir y tener al menos 6 caracteres.'; return; }

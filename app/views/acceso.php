@@ -45,6 +45,7 @@
                             </div>
                         </div>
                         <button class="btn btn-success w-100" type="submit"><i class="bi bi-box-arrow-in-right me-1"></i> Ingresar</button>
+                        <button class="btn btn-link w-100 mt-2 text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#recuperarModal">¿Olvidaste tu contraseña?</button>
                     </form>
 
                     <div class="demo-box mt-4">
@@ -117,6 +118,45 @@
         </div>
     </div>
 </main>
+
+<div class="modal fade" id="recuperarModal" tabindex="-1" aria-labelledby="recuperarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="recuperarModalLabel"><i class="bi bi-key me-2"></i>Restablecer contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form method="post" action="index.php">
+                <div class="modal-body">
+                    <input type="hidden" name="action" value="recuperar_password">
+                    <p class="text-muted small">Ingresa los datos registrados en tu cuenta.</p>
+                    <div class="mb-3">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" name="correo" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cédula o Identificación</label>
+                        <input type="text" name="identificacion" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nueva Contraseña</label>
+                        <input type="password" name="password" class="form-control" minlength="6" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Confirmar Nueva Contraseña</label>
+                        <input type="password" name="confirmar" class="form-control" minlength="6" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Cambiar Contraseña</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="public/js/app.js"></script>
 </body>
 </html>
