@@ -13,7 +13,12 @@
     <a class="navbar-brand fw-bold" href="index.php"><i class="bi bi-briefcase-fill"></i> WorkMatch</a>
 </nav>
 
-<main class="container py-5">
+<main class="container py-5 auth-main">
+    <section class="auth-intro text-center text-white mb-4">
+        <span class="eyebrow">Conecta talento y oportunidades</span>
+        <h1 class="display-6 fw-bold mt-2">Bienvenido a WorkMatch</h1>
+        <p class="mb-0">Ingresa a tu cuenta o crea tu perfil para comenzar.</p>
+    </section>
     <?php if ($mensaje): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($mensaje) ?></div>
     <?php endif; ?>
@@ -34,7 +39,10 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Contraseña</label>
-                            <input type="password" name="password" class="form-control" required>
+                            <div class="input-group">
+                                <input type="password" name="password" id="loginPassword" class="form-control" required>
+                                <button class="btn btn-outline-secondary password-toggle" type="button" data-target="loginPassword"><i class="bi bi-eye"></i></button>
+                            </div>
                         </div>
                         <button class="btn btn-success w-100" type="submit"><i class="bi bi-box-arrow-in-right me-1"></i> Ingresar</button>
                     </form>
@@ -88,11 +96,17 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Contraseña</label>
-                                <input type="password" name="password" class="form-control" minlength="6" required>
+                                <div class="input-group">
+                                    <input type="password" name="password" id="registroPassword" class="form-control" minlength="6" required>
+                                    <button class="btn btn-outline-secondary password-toggle" type="button" data-target="registroPassword"><i class="bi bi-eye"></i></button>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Confirmar Contraseña</label>
-                                <input type="password" name="confirmar" class="form-control" minlength="6" required>
+                                <div class="input-group">
+                                    <input type="password" name="confirmar" id="confirmarPassword" class="form-control" minlength="6" required>
+                                    <button class="btn btn-outline-secondary password-toggle" type="button" data-target="confirmarPassword"><i class="bi bi-eye"></i></button>
+                                </div>
                             </div>
                         </div>
 
