@@ -1,270 +1,47 @@
 <?php
-function e(mixed $value): string
-{
-    return htmlspecialchars((string) ($value ?? ''), ENT_QUOTES, 'UTF-8');
-}
-
-$esEmpresa = $usuario['tipo'] === 'empresa';
+function e(mixed $v): string { return htmlspecialchars((string)($v??''),ENT_QUOTES,'UTF-8'); }
+$esEmpresa=$usuario['tipo']==='empresa';
+function badgeEstado(string $e): string { return match($e){'Aceptado'=>'success','Entrevista'=>'primary','Rechazado'=>'danger','Cerrada'=>'secondary',default=>'warning'}; }
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>WorkMatch | <?= $esEmpresa ? 'Empresa' : 'Candidato' ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="public/css/style.css">
-</head>
-<body>
-<nav class="navbar navbar-dark bg-dark px-4 fixed-top">
-    <a class="navbar-brand fw-bold" href="index.php"><i class="bi bi-briefcase-fill"></i> WorkMatch</a>
-    <div class="text-white d-flex align-items-center gap-3">
-        <span class="user-chip"><i class="bi bi-person-circle"></i> <?= e($usuario['nombre']) ?></span>
-        <a class="btn btn-outline-light btn-sm" href="index.php?action=logout"><i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión</a>
-    </div>
-</nav>
-
-<div class="app-layout">
-    <aside class="sidebar">
-        <h5 class="mb-4"><?= $esEmpresa ? 'Empresa' : 'Candidato' ?></h5>
-        <a class="<?= $seccion === 'panel' ? 'active' : '' ?>" href="index.php?seccion=panel"><i class="bi bi-speedometer2"></i> Panel Principal</a>
-        <a class="<?= $seccion === 'perfil' ? 'active' : '' ?>" href="index.php?seccion=perfil"><i class="bi bi-person-vcard"></i> <?= $esEmpresa ? 'Perfil Empresarial' : 'Perfil Profesional' ?></a>
-        <a class="<?= $seccion === 'vacantes' ? 'active' : '' ?>" href="index.php?seccion=vacantes"><i class="bi bi-briefcase"></i> <?= $esEmpresa ? 'Vacantes' : 'Buscar Vacantes' ?></a>
-        <?php if ($esEmpresa): ?>
-            <a class="<?= $seccion === 'candidatos' ? 'active' : '' ?>" href="index.php?seccion=candidatos"><i class="bi bi-people"></i> Candidatos</a>
-        <?php else: ?>
-            <a class="<?= $seccion === 'postulaciones' ? 'active' : '' ?>" href="index.php?seccion=postulaciones"><i class="bi bi-file-earmark-check"></i> Postulaciones</a>
-        <?php endif; ?>
-    </aside>
-
-    <main class="content-area">
-        <div class="page-topbar">
-            <div>
-                <span class="eyebrow text-success"><?= $esEmpresa ? 'Cuenta empresarial' : 'Cuenta de candidato' ?></span>
-            </div>
-            <div class="live-clock" id="liveClock"><i class="bi bi-clock"></i> <span></span></div>
-        </div>
-        <?php if ($mensajeOk): ?>
-            <div class="alert alert-success"><?= e($mensajeOk) ?></div>
-        <?php endif; ?>
-
-        <?php if ($seccion === 'panel'): ?>
-            <div class="hero-panel">
-                <div>
-                    <span class="hero-kicker">Panel Principal</span>
-                    <h2 class="fw-bold mb-2">Hola, <?= e($usuario['nombre']) ?></h2>
-                    <p class="mb-0"><?= $esEmpresa ? 'Administra tus vacantes y revisa candidatos desde un solo lugar.' : 'Encuentra oportunidades y lleva el control de tus postulaciones.' ?></p>
-                </div>
-                <div class="hero-icon"><i class="bi <?= $esEmpresa ? 'bi-building' : 'bi-person-workspace' ?>"></i></div>
-            </div>
-
-            <div class="row g-4 mt-2">
-                <?php if ($esEmpresa): ?>
-                    <div class="col-md-4"><div class="card stat-card"><div class="card-body d-flex justify-content-between align-items-center"><div><h5>Vacantes</h5><h2 class="stat-number" data-count="<?= count($vacantes) ?>">0</h2></div><div class="stat-icon"><i class="bi bi-briefcase"></i></div></div></div></div>
-                    <div class="col-md-4"><div class="card stat-card"><div class="card-body d-flex justify-content-between align-items-center"><div><h5>Candidatos</h5><h2 class="stat-number" data-count="<?= count($candidatos) ?>">0</h2></div><div class="stat-icon"><i class="bi bi-people"></i></div></div></div></div>
-                    <div class="col-md-4"><div class="card stat-card"><div class="card-body"><h5>Perfil</h5><p class="mb-0"><?= e($perfil['sector'] ?: 'Pendiente de completar') ?></p></div></div></div>
-                <?php else: ?>
-                    <div class="col-md-4"><div class="card stat-card"><div class="card-body d-flex justify-content-between align-items-center"><div><h5>Vacantes disponibles</h5><h2 class="stat-number" data-count="<?= count($vacantes) ?>">0</h2></div><div class="stat-icon"><i class="bi bi-briefcase"></i></div></div></div></div>
-                    <div class="col-md-4"><div class="card stat-card"><div class="card-body d-flex justify-content-between align-items-center"><div><h5>Postulaciones</h5><h2 class="stat-number" data-count="<?= count($postulaciones) ?>">0</h2></div><div class="stat-icon"><i class="bi bi-file-earmark-check"></i></div></div></div></div>
-                    <div class="col-md-4"><div class="card stat-card"><div class="card-body"><h5>Profesión</h5><p class="mb-0"><?= e($perfil['profesion'] ?: 'Pendiente de completar') ?></p></div></div></div>
-                <?php endif; ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($seccion === 'perfil'): ?>
-            <h2 class="fw-bold"><?= $esEmpresa ? 'Perfil Empresarial' : 'Perfil Profesional' ?></h2>
-            <p class="text-muted">Actualiza la información de tu perfil.</p>
-
-            <div class="card mt-4 reveal">
-                <div class="card-body p-4">
-                    <form method="post" action="index.php?seccion=perfil">
-                        <input type="hidden" name="action" value="actualizar_perfil">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label"><?= $esEmpresa ? 'Nombre de Empresa' : 'Nombre Completo' ?></label>
-                                <input type="text" name="nombre" class="form-control" value="<?= e($perfil['nombre']) ?>" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Correo</label>
-                                <input type="email" class="form-control" value="<?= e($perfil['correo']) ?>" disabled>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Teléfono</label>
-                                <input type="text" name="telefono" class="form-control" value="<?= e($perfil['telefono']) ?>">
-                            </div>
-
-                            <?php if ($esEmpresa): ?>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Sitio Web</label>
-                                    <input type="url" name="sitio_web" class="form-control" value="<?= e($perfil['sitio_web']) ?>">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Sector</label>
-                                    <input type="text" name="sector" class="form-control" value="<?= e($perfil['sector']) ?>">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control" value="<?= e($perfil['direccion']) ?>">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Descripción de la Empresa</label>
-                                    <textarea name="descripcion" class="form-control" rows="4"><?= e($perfil['descripcion']) ?></textarea>
-                                </div>
-                            <?php else: ?>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Profesión</label>
-                                    <input type="text" name="profesion" class="form-control" value="<?= e($perfil['profesion']) ?>">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Ubicación</label>
-                                    <input type="text" name="ubicacion" class="form-control" value="<?= e($perfil['ubicacion']) ?>">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Formación Académica</label>
-                                    <textarea name="formacion" class="form-control" rows="3"><?= e($perfil['formacion']) ?></textarea>
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Experiencia Laboral</label>
-                                    <textarea name="experiencia" class="form-control" rows="3"><?= e($perfil['experiencia']) ?></textarea>
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Habilidades</label>
-                                    <textarea name="habilidades" class="form-control" rows="3"><?= e($perfil['habilidades']) ?></textarea>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                        <button class="btn btn-success" type="submit">Guardar Cambios</button>
-                    </form>
-                </div>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($seccion === 'vacantes'): ?>
-            <h2 class="fw-bold"><?= $esEmpresa ? 'Gestión de Vacantes' : 'Buscar Vacantes' ?></h2>
-
-            <?php if ($esEmpresa): ?>
-                <div class="card my-4">
-                    <div class="card-body p-4">
-                        <h5>Nueva Vacante</h5>
-                        <form method="post" action="index.php?seccion=vacantes">
-                            <input type="hidden" name="action" value="crear_vacante">
-                            <div class="row">
-                                <div class="col-md-6 mb-3"><label class="form-label">Puesto</label><input type="text" name="puesto" class="form-control" required></div>
-                                <div class="col-md-6 mb-3"><label class="form-label">Área</label><input type="text" name="area" class="form-control" required></div>
-                                <div class="col-md-6 mb-3"><label class="form-label">Ubicación</label><input type="text" name="ubicacion" class="form-control" required></div>
-                                <div class="col-md-6 mb-3"><label class="form-label">Salario</label><input type="number" step="0.01" name="salario" class="form-control"></div>
-                                <div class="col-12 mb-3"><label class="form-label">Descripción</label><textarea name="descripcion" class="form-control" rows="3" required></textarea></div>
-                            </div>
-                            <button class="btn btn-success" type="submit">Crear Vacante</button>
-                        </form>
-                    </div>
-                </div>
-            <?php endif; ?>
-
-            <div class="vacancy-tools mt-4 mb-4">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                    <input type="text" id="vacancySearch" class="form-control" placeholder="Buscar por puesto, área, empresa o ubicación...">
-                </div>
-                <span class="result-count"><strong id="vacancyCount"><?= count($vacantes) ?></strong> resultados</span>
-            </div>
-
-            <div class="row g-4" id="vacancyGrid">
-                <?php foreach ($vacantes as $vacante): ?>
-                    <div class="col-lg-6 vacancy-item">
-                        <div class="card h-100 vacancy-card" data-search="<?= e(strtolower(($vacante['puesto'] ?? '') . ' ' . ($vacante['area'] ?? '') . ' ' . ($vacante['ubicacion'] ?? '') . ' ' . ($vacante['empresa'] ?? ''))) ?>">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between gap-3">
-                                    <div>
-                                        <h5><?= e($vacante['puesto']) ?></h5>
-                                        <?php if (!$esEmpresa): ?><p class="text-success fw-semibold mb-1"><?= e($vacante['empresa']) ?></p><?php endif; ?>
-                                    </div>
-                                    <span class="badge <?= ($vacante['estado'] ?? 'Activa') === 'Activa' ? 'text-bg-success' : 'text-bg-secondary' ?> align-self-start"><?= e($vacante['estado'] ?? 'Activa') ?></span>
-                                </div>
-                                <p class="mb-1 vacancy-meta"><i class="bi bi-grid"></i><strong>Área:</strong> <?= e($vacante['area']) ?></p>
-                                <p class="mb-1 vacancy-meta"><i class="bi bi-geo-alt"></i><strong>Ubicación:</strong> <?= e($vacante['ubicacion']) ?></p>
-                                <p><?= e($vacante['descripcion']) ?></p>
-
-                                <?php if ($esEmpresa): ?>
-                                    <form method="post" action="index.php?seccion=vacantes">
-                                        <input type="hidden" name="action" value="estado_vacante">
-                                        <input type="hidden" name="vacante_id" value="<?= (int) $vacante['id'] ?>">
-                                        <button class="btn btn-outline-dark btn-sm confirm-action" data-confirm="¿Deseas cambiar el estado de esta vacante?" type="submit"><i class="bi bi-arrow-repeat me-1"></i>Cambiar Estado</button>
-                                    </form>
-                                <?php else: ?>
-                                    <form method="post" action="index.php?seccion=vacantes">
-                                        <input type="hidden" name="action" value="postular">
-                                        <input type="hidden" name="vacante_id" value="<?= (int) $vacante['id'] ?>">
-                                        <button class="btn btn-success btn-sm confirm-action" data-confirm="¿Deseas postularte a esta vacante?" type="submit"><i class="bi bi-send me-1"></i>Postularme</button>
-                                    </form>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-
-                <?php if (!$vacantes): ?>
-                    <p class="text-muted">No hay vacantes registradas.</p>
-                <?php endif; ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if (!$esEmpresa && $seccion === 'postulaciones'): ?>
-            <h2 class="fw-bold">Mis Postulaciones</h2>
-            <div class="table-responsive mt-4 reveal">
-                <table class="table table-hover align-middle">
-                    <thead><tr><th>Puesto</th><th>Empresa</th><th>Ubicación</th><th>Estado</th><th>Fecha</th></tr></thead>
-                    <tbody>
-                    <?php foreach ($postulaciones as $item): ?>
-                        <tr>
-                            <td><?= e($item['puesto']) ?></td>
-                            <td><?= e($item['empresa']) ?></td>
-                            <td><?= e($item['ubicacion']) ?></td>
-                            <td><span class="badge text-bg-secondary"><?= e($item['estado']) ?></span></td>
-                            <td><?= e($item['fecha_postulacion']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($esEmpresa && $seccion === 'candidatos'): ?>
-            <h2 class="fw-bold">Candidatos</h2>
-            <div class="table-responsive mt-4 reveal">
-                <table class="table table-hover align-middle">
-                    <thead><tr><th>Candidato</th><th>Vacante</th><th>Profesión</th><th>Habilidades</th><th>Estado</th></tr></thead>
-                    <tbody>
-                    <?php foreach ($candidatos as $item): ?>
-                        <tr>
-                            <td>
-                                <strong><?= e($item['nombre']) ?></strong><br>
-                                <small><?= e($item['correo']) ?></small>
-                            </td>
-                            <td><?= e($item['puesto']) ?></td>
-                            <td><?= e($item['profesion']) ?></td>
-                            <td><?= e($item['habilidades']) ?></td>
-                            <td>
-                                <form method="post" action="index.php?seccion=candidatos" class="d-flex gap-2">
-                                    <input type="hidden" name="action" value="estado_postulacion">
-                                    <input type="hidden" name="postulacion_id" value="<?= (int) $item['postulacion_id'] ?>">
-                                    <select name="estado" class="form-select form-select-sm">
-                                        <?php foreach (['En revisión', 'Aceptado', 'Rechazado'] as $estado): ?>
-                                            <option value="<?= e($estado) ?>" <?= $item['estado'] === $estado ? 'selected' : '' ?>><?= e($estado) ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <button class="btn btn-dark btn-sm" type="submit">Guardar</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php endif; ?>
-    </main>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WorkMatch</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"><link rel="stylesheet" href="public/css/style.css"></head><body>
+<nav class="navbar navbar-dark fixed-top px-3"><a class="navbar-brand fw-bold" href="index.php"><i class="bi bi-briefcase-fill"></i> WorkMatch</a><div class="d-flex align-items-center gap-3 text-white"><span class="d-none d-md-inline"><?= e($usuario['nombre']) ?> · <?= $esEmpresa?'Empresa':'Candidato' ?></span><a class="btn btn-outline-light btn-sm" href="index.php?action=logout">Salir</a></div></nav>
+<div class="app-layout"><aside class="sidebar"><h5><?= $esEmpresa?'Panel Empresa':'Panel Candidato' ?></h5>
+<a class="<?= $seccion==='panel'?'active':'' ?>" href="index.php?seccion=panel"><i class="bi bi-speedometer2"></i>Panel</a>
+<a class="<?= $seccion==='perfil'?'active':'' ?>" href="index.php?seccion=perfil"><i class="bi bi-person-circle"></i>Perfil</a>
+<a class="<?= $seccion==='vacantes'?'active':'' ?>" href="index.php?seccion=vacantes"><i class="bi bi-briefcase"></i><?= $esEmpresa?'Mis Vacantes':'Buscar Vacantes' ?></a>
+<?php if($esEmpresa): ?><a class="<?= $seccion==='candidatos'?'active':'' ?>" href="index.php?seccion=candidatos"><i class="bi bi-people"></i>Candidatos</a>
+<?php else: ?><a class="<?= $seccion==='favoritas'?'active':'' ?>" href="index.php?seccion=favoritas"><i class="bi bi-bookmark-heart"></i>Guardadas</a><a class="<?= $seccion==='postulaciones'?'active':'' ?>" href="index.php?seccion=postulaciones"><i class="bi bi-send-check"></i>Postulaciones</a><?php endif; ?></aside>
+<main class="content-area">
+<?php if($mensajeOk): ?><div class="alert alert-success"><?= e($mensajeOk) ?></div><?php endif; ?>
+<?php if($seccion==='panel'): ?>
+<div class="hero-dashboard mb-4"><div><span class="eyebrow">Bienvenido</span><h2><?= e($usuario['nombre']) ?></h2><p><?= $esEmpresa?'Gestiona tus publicaciones y revisa candidatos desde un solo lugar.':'Encuentra oportunidades, guarda vacantes y lleva control de tus postulaciones.' ?></p></div></div>
+<div class="row g-3">
+<?php if($esEmpresa): $activas=count(array_filter($vacantes,fn($v)=>$v['estado']==='Activa')); ?><div class="col-md-4"><div class="card stat-card"><div class="card-body"><i class="bi bi-briefcase stat-icon"></i><small>Vacantes publicadas</small><h3><?= count($vacantes) ?></h3></div></div></div><div class="col-md-4"><div class="card stat-card"><div class="card-body"><i class="bi bi-check-circle stat-icon"></i><small>Vacantes activas</small><h3><?= $activas ?></h3></div></div></div><div class="col-md-4"><div class="card stat-card"><div class="card-body"><i class="bi bi-people stat-icon"></i><small>Candidaturas recibidas</small><h3><?= count($candidatos) ?></h3></div></div></div>
+<?php else: ?><div class="col-md-4"><div class="card stat-card"><div class="card-body"><i class="bi bi-briefcase stat-icon"></i><small>Vacantes disponibles</small><h3><?= count($vacantes) ?></h3></div></div></div><div class="col-md-4"><div class="card stat-card"><div class="card-body"><i class="bi bi-bookmark-heart stat-icon"></i><small>Guardadas</small><h3><?= count($favoritas) ?></h3></div></div></div><div class="col-md-4"><div class="card stat-card"><div class="card-body"><i class="bi bi-send-check stat-icon"></i><small>Postulaciones</small><h3><?= count($postulaciones) ?></h3></div></div></div><?php endif; ?>
 </div>
-<script src="public/js/app.js"></script>
-</body>
-</html>
+<?php endif; ?>
+
+<?php if($seccion==='perfil'): ?><h2>Mi Perfil</h2><p class="text-muted">Mantén tu información actualizada.</p><div class="card"><div class="card-body"><form method="post"><input type="hidden" name="action" value="actualizar_perfil"><div class="row g-3"><div class="col-md-6"><label class="form-label">Nombre</label><input class="form-control" name="nombre" value="<?= e($perfil['nombre']) ?>" required></div><div class="col-md-6"><label class="form-label">Teléfono</label><input class="form-control" name="telefono" value="<?= e($perfil['telefono']) ?>"></div>
+<?php if($esEmpresa): ?><div class="col-md-6"><label class="form-label">Sitio web</label><input class="form-control" name="sitio_web" value="<?= e($perfil['sitio_web']) ?>"></div><div class="col-md-6"><label class="form-label">Sector</label><input class="form-control" name="sector" value="<?= e($perfil['sector']) ?>"></div><div class="col-12"><label class="form-label">Dirección</label><input class="form-control" name="direccion" value="<?= e($perfil['direccion']) ?>"></div><div class="col-12"><label class="form-label">Descripción</label><textarea class="form-control" name="descripcion" rows="4"><?= e($perfil['descripcion']) ?></textarea></div>
+<?php else: ?><div class="col-md-6"><label class="form-label">Profesión</label><input class="form-control" name="profesion" value="<?= e($perfil['profesion']) ?>"></div><div class="col-md-6"><label class="form-label">Ubicación</label><input class="form-control" name="ubicacion" value="<?= e($perfil['ubicacion']) ?>"></div><div class="col-12"><label class="form-label">Formación académica</label><textarea class="form-control" name="formacion" rows="3"><?= e($perfil['formacion']) ?></textarea></div><div class="col-12"><label class="form-label">Experiencia</label><textarea class="form-control" name="experiencia" rows="3"><?= e($perfil['experiencia']) ?></textarea></div><div class="col-12"><label class="form-label">Habilidades</label><textarea class="form-control" name="habilidades" rows="3"><?= e($perfil['habilidades']) ?></textarea></div><?php endif; ?>
+<div class="col-12"><button class="btn btn-success">Guardar cambios</button></div></div></form></div></div><?php endif; ?>
+
+<?php if($seccion==='vacantes'): ?><div class="d-flex flex-wrap justify-content-between align-items-center gap-3"><div><h2><?= $esEmpresa?'Mis Vacantes':'Vacantes Disponibles' ?></h2><p class="text-muted mb-0"><?= $esEmpresa?'Crea, edita, pausa o elimina tus publicaciones.':'Filtra oportunidades y postúlate directamente.' ?></p></div><?php if($esEmpresa): ?><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNueva"><i class="bi bi-plus-lg"></i> Nueva vacante</button><?php endif; ?></div>
+<?php if(!$esEmpresa): ?><div class="filter-bar my-4"><input id="vacancySearch" class="form-control" placeholder="Buscar por puesto, empresa o ubicación"><select id="filterModalidad" class="form-select"><option value="">Todas las modalidades</option><option>Presencial</option><option>Híbrido</option><option>Remoto</option></select><select id="filterContrato" class="form-select"><option value="">Todo contrato</option><option>Tiempo completo</option><option>Medio tiempo</option><option>Temporal</option><option>Práctica</option></select></div><?php endif; ?>
+<div class="row g-4 mt-1" id="vacancyGrid"><?php foreach($vacantes as $v): ?><div class="col-lg-6 vacancy-item" data-modalidad="<?= e($v['modalidad']??'Presencial') ?>" data-contrato="<?= e($v['tipo_contrato']??'Tiempo completo') ?>"><div class="card vacancy-card h-100" data-search="<?= e(strtolower(($v['puesto']??'').' '.($v['area']??'').' '.($v['ubicacion']??'').' '.($v['empresa']??''))) ?>"><div class="card-body"><div class="d-flex justify-content-between gap-3"><div><h5><?= e($v['puesto']) ?></h5><?php if(!$esEmpresa): ?><div class="company-name"><?= e($v['empresa']) ?></div><?php endif; ?></div><span class="badge text-bg-<?= ($v['estado']??'Activa')==='Activa'?'success':'secondary' ?>"><?= e($v['estado']??'Activa') ?></span></div><div class="vacancy-chips"><span><i class="bi bi-geo-alt"></i><?= e($v['ubicacion']) ?></span><span><i class="bi bi-laptop"></i><?= e($v['modalidad']??'Presencial') ?></span><span><i class="bi bi-clock"></i><?= e($v['tipo_contrato']??'Tiempo completo') ?></span></div><p class="mt-3"><?= e($v['descripcion']) ?></p><div class="small text-muted mb-3"><strong>Requisitos:</strong> <?= e($v['requisitos']??'No especificados') ?></div><?php if(!empty($v['salario'])): ?><div class="salary mb-3">₡<?= number_format((float)$v['salario'],0,',','.') ?></div><?php endif; ?>
+<?php if($esEmpresa): ?><div class="d-flex flex-wrap gap-2"><button class="btn btn-outline-primary btn-sm edit-vacancy" data-bs-toggle="modal" data-bs-target="#modalEditar" data-vacante='<?= e(json_encode($v,JSON_UNESCAPED_UNICODE)) ?>'><i class="bi bi-pencil"></i> Editar</button><form method="post"><input type="hidden" name="action" value="estado_vacante"><input type="hidden" name="vacante_id" value="<?= (int)$v['id'] ?>"><button class="btn btn-outline-dark btn-sm">Cambiar estado</button></form><form method="post"><input type="hidden" name="action" value="eliminar_vacante"><input type="hidden" name="vacante_id" value="<?= (int)$v['id'] ?>"><button class="btn btn-outline-danger btn-sm confirm-action" data-confirm="¿Eliminar esta vacante?">Eliminar</button></form><span class="ms-auto small text-muted align-self-center"><i class="bi bi-people"></i> <?= (int)($v['total_postulantes']??0) ?> postulantes</span></div>
+<?php else: ?><div class="d-flex gap-2"><form method="post"><input type="hidden" name="action" value="favorito"><input type="hidden" name="vacante_id" value="<?= (int)$v['id'] ?>"><input type="hidden" name="volver" value="vacantes"><button class="btn <?= !empty($v['favorita'])?'btn-dark':'btn-outline-dark' ?> btn-sm"><i class="bi bi-bookmark-heart"></i> <?= !empty($v['favorita'])?'Guardada':'Guardar' ?></button></form><?php if(!empty($v['postulado'])): ?><button class="btn btn-secondary btn-sm" disabled><i class="bi bi-check2"></i> Ya postulaste</button><?php else: ?><button class="btn btn-success btn-sm apply-btn" data-bs-toggle="modal" data-bs-target="#modalPostular" data-id="<?= (int)$v['id'] ?>" data-puesto="<?= e($v['puesto']) ?>"><i class="bi bi-send"></i> Postularme</button><?php endif; ?></div><?php endif; ?></div></div></div><?php endforeach; ?></div><?php endif; ?>
+
+<?php if(!$esEmpresa && $seccion==='favoritas'): ?><h2>Vacantes Guardadas</h2><p class="text-muted">Tus oportunidades favoritas para revisar después.</p><div class="row g-3"><?php foreach($favoritas as $v): ?><div class="col-md-6"><div class="card"><div class="card-body"><h5><?= e($v['puesto']) ?></h5><p class="company-name"><?= e($v['empresa']) ?></p><p><?= e($v['ubicacion']) ?> · <?= e($v['modalidad']??'Presencial') ?></p><form method="post"><input type="hidden" name="action" value="favorito"><input type="hidden" name="vacante_id" value="<?= (int)$v['id'] ?>"><input type="hidden" name="volver" value="favoritas"><button class="btn btn-outline-danger btn-sm">Quitar de guardadas</button></form></div></div></div><?php endforeach; ?><?php if(!$favoritas): ?><p class="text-muted">Todavía no guardas vacantes.</p><?php endif; ?></div><?php endif; ?>
+
+<?php if(!$esEmpresa && $seccion==='postulaciones'): ?><h2>Mis Postulaciones</h2><p class="text-muted">Consulta el avance de cada proceso.</p><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Puesto</th><th>Empresa</th><th>Modalidad</th><th>Estado</th><th>Fecha</th><th></th></tr></thead><tbody><?php foreach($postulaciones as $p): ?><tr><td><strong><?= e($p['puesto']) ?></strong></td><td><?= e($p['empresa']) ?></td><td><?= e($p['modalidad']) ?></td><td><span class="badge text-bg-<?= badgeEstado($p['estado']) ?>"><?= e($p['estado']) ?></span></td><td><?= e(date('d/m/Y',strtotime($p['fecha_postulacion']))) ?></td><td><?php if($p['estado']==='En revisión'): ?><form method="post"><input type="hidden" name="action" value="retirar_postulacion"><input type="hidden" name="postulacion_id" value="<?= (int)$p['id'] ?>"><button class="btn btn-outline-danger btn-sm confirm-action" data-confirm="¿Retirar esta postulación?">Retirar</button></form><?php endif; ?></td></tr><?php endforeach; ?></tbody></table></div><?php endif; ?>
+
+<?php if($esEmpresa && $seccion==='candidatos'): ?><div class="d-flex justify-content-between align-items-center"><div><h2>Candidatos</h2><p class="text-muted">Revisa perfiles y avanza cada candidatura.</p></div><input id="candidateSearch" class="form-control search-small" placeholder="Buscar candidato"></div><div class="row g-3 mt-2" id="candidateGrid"><?php foreach($candidatos as $c): ?><div class="col-lg-6 candidate-item" data-search="<?= e(strtolower($c['nombre'].' '.$c['puesto'].' '.$c['profesion'].' '.$c['habilidades'])) ?>"><div class="card h-100"><div class="card-body"><div class="d-flex justify-content-between"><div><h5><?= e($c['nombre']) ?></h5><p class="mb-1 text-muted"><?= e($c['profesion']) ?> · <?= e($c['ubicacion']) ?></p></div><span class="badge text-bg-<?= badgeEstado($c['estado']) ?> align-self-start"><?= e($c['estado']) ?></span></div><hr><p><strong>Vacante:</strong> <?= e($c['puesto']) ?></p><p><strong>Habilidades:</strong> <?= e($c['habilidades']) ?></p><?php if($c['mensaje']): ?><div class="candidate-message">“<?= e($c['mensaje']) ?>”</div><?php endif; ?><div class="small mb-3"><i class="bi bi-envelope"></i> <?= e($c['correo']) ?> &nbsp; <i class="bi bi-telephone"></i> <?= e($c['telefono']) ?></div><form method="post" class="d-flex gap-2"><input type="hidden" name="action" value="estado_postulacion"><input type="hidden" name="postulacion_id" value="<?= (int)$c['postulacion_id'] ?>"><select name="estado" class="form-select form-select-sm"><?php foreach(['En revisión','Entrevista','Aceptado','Rechazado'] as $est): ?><option <?= $c['estado']===$est?'selected':'' ?>><?= e($est) ?></option><?php endforeach; ?></select><button class="btn btn-dark btn-sm">Guardar</button></form></div></div></div><?php endforeach; ?></div><?php endif; ?>
+</main></div>
+
+<?php if($esEmpresa): ?>
+<div class="modal fade" id="modalNueva" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><form method="post"><div class="modal-header"><h5>Nueva Vacante</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><?php include __DIR__.'/vacante_form_fields.php'; ?></div><div class="modal-footer"><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-success">Publicar</button></div><input type="hidden" name="action" value="crear_vacante"></form></div></div></div>
+<div class="modal fade" id="modalEditar" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><form method="post"><div class="modal-header"><h5>Editar Vacante</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><?php include __DIR__.'/vacante_form_fields.php'; ?></div><div class="modal-footer"><button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary">Guardar cambios</button></div><input type="hidden" name="action" value="editar_vacante"><input type="hidden" name="vacante_id" id="edit_id"></form></div></div></div>
+<?php else: ?><div class="modal fade" id="modalPostular" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form method="post"><div class="modal-header"><h5>Postularme a <span id="applyTitle"></span></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><label class="form-label">Mensaje para la empresa (opcional)</label><textarea name="mensaje" class="form-control" rows="4" placeholder="Ejemplo: Me interesa la vacante y considero que mi experiencia puede aportar al equipo."></textarea></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-success">Enviar postulación</button></div><input type="hidden" name="action" value="postular"><input type="hidden" name="vacante_id" id="applyVacancyId"></form></div></div></div><?php endif; ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="public/js/app.js"></script></body></html>

@@ -611,3 +611,9 @@ body::before {
     .vacancy-tools { flex-direction: column; align-items: stretch; }
     .result-count { text-align: right; }
 }
+.hero-dashboard{background:linear-gradient(135deg,#111827,#1f2937);color:#fff;border-radius:18px;padding:30px;box-shadow:0 12px 30px rgba(17,24,39,.15)}
+.hero-dashboard h2{font-size:2rem;margin:4px 0}.hero-dashboard p{margin:0;color:#d1d5db}.eyebrow{text-transform:uppercase;letter-spacing:1px;font-size:.75rem;color:#86efac;font-weight:700}
+.stat-icon{font-size:1.6rem;color:var(--wm-green);display:block;margin-bottom:14px}.stat-card small{color:var(--wm-muted)}.stat-card h3{font-size:2rem;margin:4px 0 0}
+.filter-bar{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;background:#fff;padding:14px;border:1px solid var(--wm-border);border-radius:14px}
+.company-name{color:var(--wm-green);font-weight:700}.vacancy-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.vacancy-chips span{background:#f3f4f6;border-radius:999px;padding:6px 10px;font-size:.8rem}.vacancy-chips i{margin-right:5px}.salary{font-size:1.05rem;font-weight:800;color:#111827}.candidate-message{background:#f8fafc;border-left:3px solid var(--wm-green);padding:10px 12px;border-radius:8px;margin-bottom:12px;color:#4b5563}.search-small{max-width:260px}.modal-content{border:0;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+@media(max-width:900px){.filter-bar{grid-template-columns:1fr}.search-small{max-width:100%}}

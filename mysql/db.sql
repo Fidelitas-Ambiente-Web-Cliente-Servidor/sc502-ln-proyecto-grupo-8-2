@@ -80,3 +80,20 @@ SELECT id, 'Desarrollador Front End', 'Tecnología', 'Apoyo en desarrollo y mant
 FROM usuarios
 WHERE correo = 'empresa@workmatch.com'
 AND NOT EXISTS (SELECT 1 FROM vacantes WHERE puesto = 'Desarrollador Front End');
+
+-- Funciones adicionales para vacantes y candidatos
+ALTER TABLE vacantes ADD COLUMN IF NOT EXISTS requisitos TEXT NULL AFTER descripcion;
+ALTER TABLE vacantes ADD COLUMN IF NOT EXISTS modalidad ENUM('Presencial','Híbrido','Remoto') NOT NULL DEFAULT 'Presencial' AFTER ubicacion;
+ALTER TABLE vacantes ADD COLUMN IF NOT EXISTS tipo_contrato ENUM('Tiempo completo','Medio tiempo','Temporal','Práctica') NOT NULL DEFAULT 'Tiempo completo' AFTER modalidad;
+ALTER TABLE postulaciones ADD COLUMN IF NOT EXISTS mensaje TEXT NULL AFTER estado;
+ALTER TABLE postulaciones MODIFY estado ENUM('En revisión','Entrevista','Aceptado','Rechazado') DEFAULT 'En revisión';
+
+CREATE TABLE IF NOT EXISTS favoritos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vacante_id INT NOT NULL,
+    candidato_id INT NOT NULL,
+    fecha_guardado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_favorito (vacante_id,candidato_id),
+    CONSTRAINT fk_favorito_vacante FOREIGN KEY (vacante_id) REFERENCES vacantes(id) ON DELETE CASCADE,
+    CONSTRAINT fk_favorito_candidato FOREIGN KEY (candidato_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);

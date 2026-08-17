@@ -114,3 +114,34 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 4500);
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modalidad = document.getElementById('filterModalidad');
+    const contrato = document.getElementById('filterContrato');
+    const busqueda = document.getElementById('vacancySearch');
+    function filtrarVacantes(){
+        document.querySelectorAll('.vacancy-item').forEach(function(item){
+            const texto=(item.querySelector('.vacancy-card')?.dataset.search||'');
+            const okTexto=!busqueda || texto.includes(busqueda.value.toLowerCase().trim());
+            const okModalidad=!modalidad || !modalidad.value || item.dataset.modalidad===modalidad.value;
+            const okContrato=!contrato || !contrato.value || item.dataset.contrato===contrato.value;
+            item.classList.toggle('d-none',!(okTexto&&okModalidad&&okContrato));
+        });
+    }
+    [busqueda,modalidad,contrato].forEach(function(el){ if(el) el.addEventListener(el.tagName==='INPUT'?'input':'change',filtrarVacantes); });
+
+    document.querySelectorAll('.apply-btn').forEach(function(btn){ btn.addEventListener('click',function(){
+        const id=document.getElementById('applyVacancyId'); const title=document.getElementById('applyTitle');
+        if(id) id.value=btn.dataset.id; if(title) title.textContent=btn.dataset.puesto;
+    }); });
+
+    document.querySelectorAll('.edit-vacancy').forEach(function(btn){ btn.addEventListener('click',function(){
+        try{ const d=JSON.parse(btn.dataset.vacante); const modal=document.getElementById('modalEditar'); if(!modal) return;
+            document.getElementById('edit_id').value=d.id;
+            ['puesto','area','ubicacion','modalidad','tipo_contrato','salario','descripcion','requisitos'].forEach(function(k){ const el=modal.querySelector('[name="'+k+'"]'); if(el) el.value=d[k]||''; });
+        }catch(e){}
+    }); });
+
+    const candidateSearch=document.getElementById('candidateSearch');
+    if(candidateSearch) candidateSearch.addEventListener('input',function(){ const q=candidateSearch.value.toLowerCase().trim(); document.querySelectorAll('.candidate-item').forEach(function(item){ item.classList.toggle('d-none',!(item.dataset.search||'').includes(q)); }); });
+});

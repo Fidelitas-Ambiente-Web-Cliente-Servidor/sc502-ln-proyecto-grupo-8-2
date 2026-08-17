@@ -13,235 +13,161 @@ class WorkMatch
 
     public function login(string $correo, string $password): array|false
     {
-        $sql = 'SELECT * FROM usuarios WHERE correo = :correo LIMIT 1';
-        $stmt = $this->connection->prepare($sql);
+        $stmt = $this->connection->prepare('SELECT * FROM usuarios WHERE correo = :correo LIMIT 1');
         $stmt->execute(['correo' => $correo]);
         $usuario = $stmt->fetch();
-
         if ($usuario && password_verify($password, $usuario['password'])) {
             unset($usuario['password']);
             return $usuario;
         }
-
         return false;
     }
 
     public function registrar(array $datos): bool
     {
-        $sql = 'INSERT INTO usuarios (nombre, identificacion, correo, telefono, sitio_web, password, tipo)
-                VALUES (:nombre, :identificacion, :correo, :telefono, :sitio_web, :password, :tipo)';
-
         try {
-            $stmt = $this->connection->prepare($sql);
+            $stmt = $this->connection->prepare('INSERT INTO usuarios (nombre, identificacion, correo, telefono, sitio_web, password, tipo) VALUES (:nombre,:identificacion,:correo,:telefono,:sitio_web,:password,:tipo)');
             $stmt->execute([
-                'nombre' => $datos['nombre'],
-                'identificacion' => $datos['identificacion'],
-                'correo' => $datos['correo'],
-                'telefono' => $datos['telefono'] ?: null,
-                'sitio_web' => $datos['sitio_web'] ?: null,
-                'password' => password_hash($datos['password'], PASSWORD_DEFAULT),
-                'tipo' => $datos['tipo'],
+                'nombre'=>$datos['nombre'], 'identificacion'=>$datos['identificacion'], 'correo'=>$datos['correo'],
+                'telefono'=>$datos['telefono'] ?: null, 'sitio_web'=>$datos['sitio_web'] ?: null,
+                'password'=>password_hash($datos['password'], PASSWORD_DEFAULT), 'tipo'=>$datos['tipo']
             ]);
-
-            $usuarioId = (int) $this->connection->lastInsertId();
-
-            if ($datos['tipo'] === 'candidato') {
-                $stmt = $this->connection->prepare('INSERT INTO perfiles_candidato (usuario_id) VALUES (:usuario_id)');
-            } else {
-                $stmt = $this->connection->prepare('INSERT INTO perfiles_empresa (usuario_id) VALUES (:usuario_id)');
-            }
-
-            $stmt->execute(['usuario_id' => $usuarioId]);
+            $id = (int)$this->connection->lastInsertId();
+            $tabla = $datos['tipo'] === 'empresa' ? 'perfiles_empresa' : 'perfiles_candidato';
+            $stmt = $this->connection->prepare("INSERT INTO {$tabla} (usuario_id) VALUES (:id)");
+            $stmt->execute(['id'=>$id]);
             return true;
-        } catch (PDOException $exception) {
-            return false;
-        }
+        } catch (PDOException $e) { return false; }
     }
 
     public function obtenerUsuario(int $id): array|false
     {
-        $stmt = $this->connection->prepare('SELECT id, nombre, identificacion, correo, telefono, sitio_web, tipo FROM usuarios WHERE id = :id');
-        $stmt->execute(['id' => $id]);
+        $stmt = $this->connection->prepare('SELECT id,nombre,identificacion,correo,telefono,sitio_web,tipo FROM usuarios WHERE id=:id');
+        $stmt->execute(['id'=>$id]);
         return $stmt->fetch();
     }
 
-    public function obtenerPerfilCandidato(int $usuarioId): array|false
+    public function obtenerPerfilCandidato(int $id): array|false
     {
-        $sql = 'SELECT u.id, u.nombre, u.identificacion, u.correo, u.telefono,
-                       p.profesion, p.formacion, p.experiencia, p.habilidades, p.ubicacion
-                FROM usuarios u
-                INNER JOIN perfiles_candidato p ON p.usuario_id = u.id
-                WHERE u.id = :id';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute(['id' => $usuarioId]);
-        return $stmt->fetch();
+        $stmt=$this->connection->prepare('SELECT u.id,u.nombre,u.identificacion,u.correo,u.telefono,p.profesion,p.formacion,p.experiencia,p.habilidades,p.ubicacion FROM usuarios u JOIN perfiles_candidato p ON p.usuario_id=u.id WHERE u.id=:id');
+        $stmt->execute(['id'=>$id]); return $stmt->fetch();
     }
 
-    public function obtenerPerfilEmpresa(int $usuarioId): array|false
+    public function obtenerPerfilEmpresa(int $id): array|false
     {
-        $sql = 'SELECT u.id, u.nombre, u.identificacion, u.correo, u.telefono, u.sitio_web,
-                       p.sector, p.descripcion, p.direccion
-                FROM usuarios u
-                INNER JOIN perfiles_empresa p ON p.usuario_id = u.id
-                WHERE u.id = :id';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute(['id' => $usuarioId]);
-        return $stmt->fetch();
+        $stmt=$this->connection->prepare('SELECT u.id,u.nombre,u.identificacion,u.correo,u.telefono,u.sitio_web,p.sector,p.descripcion,p.direccion FROM usuarios u JOIN perfiles_empresa p ON p.usuario_id=u.id WHERE u.id=:id');
+        $stmt->execute(['id'=>$id]); return $stmt->fetch();
     }
 
-    public function actualizarPerfilCandidato(int $usuarioId, array $datos): void
+    private function actualizarUsuario(int $id, array $d): void
     {
-        $this->actualizarDatosUsuario($usuarioId, $datos);
-
-        $sql = 'UPDATE perfiles_candidato
-                SET profesion = :profesion, formacion = :formacion, experiencia = :experiencia,
-                    habilidades = :habilidades, ubicacion = :ubicacion
-                WHERE usuario_id = :usuario_id';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([
-            'profesion' => $datos['profesion'],
-            'formacion' => $datos['formacion'],
-            'experiencia' => $datos['experiencia'],
-            'habilidades' => $datos['habilidades'],
-            'ubicacion' => $datos['ubicacion'],
-            'usuario_id' => $usuarioId,
-        ]);
+        $stmt=$this->connection->prepare('UPDATE usuarios SET nombre=:nombre,telefono=:telefono,sitio_web=:sitio_web WHERE id=:id');
+        $stmt->execute(['nombre'=>$d['nombre'],'telefono'=>$d['telefono']?:null,'sitio_web'=>$d['sitio_web']?:null,'id'=>$id]);
     }
 
-    public function actualizarPerfilEmpresa(int $usuarioId, array $datos): void
+    public function actualizarPerfilCandidato(int $id,array $d): void
     {
-        $this->actualizarDatosUsuario($usuarioId, $datos);
-
-        $sql = 'UPDATE perfiles_empresa
-                SET sector = :sector, descripcion = :descripcion, direccion = :direccion
-                WHERE usuario_id = :usuario_id';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([
-            'sector' => $datos['sector'],
-            'descripcion' => $datos['descripcion'],
-            'direccion' => $datos['direccion'],
-            'usuario_id' => $usuarioId,
-        ]);
+        $this->actualizarUsuario($id,$d);
+        $stmt=$this->connection->prepare('UPDATE perfiles_candidato SET profesion=:profesion,formacion=:formacion,experiencia=:experiencia,habilidades=:habilidades,ubicacion=:ubicacion WHERE usuario_id=:id');
+        $stmt->execute(['profesion'=>$d['profesion'],'formacion'=>$d['formacion'],'experiencia'=>$d['experiencia'],'habilidades'=>$d['habilidades'],'ubicacion'=>$d['ubicacion'],'id'=>$id]);
     }
 
-    private function actualizarDatosUsuario(int $usuarioId, array $datos): void
+    public function actualizarPerfilEmpresa(int $id,array $d): void
     {
-        $sql = 'UPDATE usuarios
-                SET nombre = :nombre, telefono = :telefono, sitio_web = :sitio_web
-                WHERE id = :id';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([
-            'nombre' => $datos['nombre'],
-            'telefono' => $datos['telefono'] ?: null,
-            'sitio_web' => $datos['sitio_web'] ?: null,
-            'id' => $usuarioId,
-        ]);
+        $this->actualizarUsuario($id,$d);
+        $stmt=$this->connection->prepare('UPDATE perfiles_empresa SET sector=:sector,descripcion=:descripcion,direccion=:direccion WHERE usuario_id=:id');
+        $stmt->execute(['sector'=>$d['sector'],'descripcion'=>$d['descripcion'],'direccion'=>$d['direccion'],'id'=>$id]);
     }
 
-    public function listarVacantes(): array
+    public function listarVacantes(int $candidatoId=0): array
     {
-        $sql = "SELECT v.*, u.nombre AS empresa
-                FROM vacantes v
-                INNER JOIN usuarios u ON u.id = v.empresa_id
-                WHERE v.estado = 'Activa'
-                ORDER BY v.fecha_creacion DESC";
-        return $this->connection->query($sql)->fetchAll();
+        $sql="SELECT v.*,u.nombre empresa,
+              (SELECT COUNT(*) FROM postulaciones p WHERE p.vacante_id=v.id) total_postulantes,
+              EXISTS(SELECT 1 FROM favoritos f WHERE f.vacante_id=v.id AND f.candidato_id=:cid) favorita,
+              EXISTS(SELECT 1 FROM postulaciones p2 WHERE p2.vacante_id=v.id AND p2.candidato_id=:cid2) postulado
+              FROM vacantes v JOIN usuarios u ON u.id=v.empresa_id WHERE v.estado='Activa' ORDER BY v.fecha_creacion DESC";
+        $stmt=$this->connection->prepare($sql); $stmt->execute(['cid'=>$candidatoId,'cid2'=>$candidatoId]); return $stmt->fetchAll();
     }
 
     public function listarVacantesEmpresa(int $empresaId): array
     {
-        $stmt = $this->connection->prepare('SELECT * FROM vacantes WHERE empresa_id = :empresa_id ORDER BY fecha_creacion DESC');
-        $stmt->execute(['empresa_id' => $empresaId]);
-        return $stmt->fetchAll();
+        $stmt=$this->connection->prepare('SELECT v.*,(SELECT COUNT(*) FROM postulaciones p WHERE p.vacante_id=v.id) total_postulantes FROM vacantes v WHERE empresa_id=:id ORDER BY fecha_creacion DESC');
+        $stmt->execute(['id'=>$empresaId]); return $stmt->fetchAll();
     }
 
-    public function crearVacante(int $empresaId, array $datos): void
+    public function crearVacante(int $empresaId,array $d): void
     {
-        $sql = 'INSERT INTO vacantes (empresa_id, puesto, area, descripcion, ubicacion, salario, estado)
-                VALUES (:empresa_id, :puesto, :area, :descripcion, :ubicacion, :salario, :estado)';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([
-            'empresa_id' => $empresaId,
-            'puesto' => $datos['puesto'],
-            'area' => $datos['area'],
-            'descripcion' => $datos['descripcion'],
-            'ubicacion' => $datos['ubicacion'],
-            'salario' => $datos['salario'] ?: null,
-            'estado' => 'Activa',
-        ]);
+        $stmt=$this->connection->prepare('INSERT INTO vacantes (empresa_id,puesto,area,descripcion,requisitos,ubicacion,modalidad,tipo_contrato,salario,estado) VALUES (:empresa,:puesto,:area,:descripcion,:requisitos,:ubicacion,:modalidad,:contrato,:salario,\'Activa\')');
+        $stmt->execute(['empresa'=>$empresaId,'puesto'=>$d['puesto'],'area'=>$d['area'],'descripcion'=>$d['descripcion'],'requisitos'=>$d['requisitos'],'ubicacion'=>$d['ubicacion'],'modalidad'=>$d['modalidad'],'contrato'=>$d['tipo_contrato'],'salario'=>$d['salario']?:null]);
     }
 
-    public function cambiarEstadoVacante(int $vacanteId, int $empresaId): void
+    public function editarVacante(int $id,int $empresaId,array $d): void
     {
-        $sql = "UPDATE vacantes
-                SET estado = IF(estado = 'Activa', 'Cerrada', 'Activa')
-                WHERE id = :id AND empresa_id = :empresa_id";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute(['id' => $vacanteId, 'empresa_id' => $empresaId]);
+        $stmt=$this->connection->prepare('UPDATE vacantes SET puesto=:puesto,area=:area,descripcion=:descripcion,requisitos=:requisitos,ubicacion=:ubicacion,modalidad=:modalidad,tipo_contrato=:contrato,salario=:salario WHERE id=:id AND empresa_id=:empresa');
+        $stmt->execute(['puesto'=>$d['puesto'],'area'=>$d['area'],'descripcion'=>$d['descripcion'],'requisitos'=>$d['requisitos'],'ubicacion'=>$d['ubicacion'],'modalidad'=>$d['modalidad'],'contrato'=>$d['tipo_contrato'],'salario'=>$d['salario']?:null,'id'=>$id,'empresa'=>$empresaId]);
     }
 
-    public function postular(int $vacanteId, int $candidatoId): bool
+    public function eliminarVacante(int $id,int $empresaId): void
+    {
+        $stmt=$this->connection->prepare('DELETE FROM vacantes WHERE id=:id AND empresa_id=:empresa');
+        $stmt->execute(['id'=>$id,'empresa'=>$empresaId]);
+    }
+
+    public function cambiarEstadoVacante(int $id,int $empresaId): void
+    {
+        $stmt=$this->connection->prepare("UPDATE vacantes SET estado=IF(estado='Activa','Cerrada','Activa') WHERE id=:id AND empresa_id=:empresa");
+        $stmt->execute(['id'=>$id,'empresa'=>$empresaId]);
+    }
+
+    public function postular(int $vacanteId,int $candidatoId,string $mensaje=''): bool
     {
         try {
-            $sql = 'INSERT INTO postulaciones (vacante_id, candidato_id, estado)
-                    VALUES (:vacante_id, :candidato_id, :estado)';
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute([
-                'vacante_id' => $vacanteId,
-                'candidato_id' => $candidatoId,
-                'estado' => 'En revisión',
-            ]);
-            return true;
-        } catch (PDOException $exception) {
-            return false;
+            $stmt=$this->connection->prepare("INSERT INTO postulaciones (vacante_id,candidato_id,estado,mensaje) SELECT :vacante,:candidato,'En revisión',:mensaje FROM vacantes WHERE id=:vacante2 AND estado='Activa'");
+            $stmt->execute(['vacante'=>$vacanteId,'candidato'=>$candidatoId,'mensaje'=>$mensaje ?: null,'vacante2'=>$vacanteId]);
+            return $stmt->rowCount()>0;
+        } catch(PDOException $e){ return false; }
+    }
+
+    public function retirarPostulacion(int $postulacionId,int $candidatoId): void
+    {
+        $stmt=$this->connection->prepare("DELETE FROM postulaciones WHERE id=:id AND candidato_id=:candidato AND estado='En revisión'");
+        $stmt->execute(['id'=>$postulacionId,'candidato'=>$candidatoId]);
+    }
+
+    public function alternarFavorito(int $vacanteId,int $candidatoId): void
+    {
+        $stmt=$this->connection->prepare('SELECT id FROM favoritos WHERE vacante_id=:v AND candidato_id=:c');
+        $stmt->execute(['v'=>$vacanteId,'c'=>$candidatoId]);
+        if($stmt->fetch()){
+            $stmt=$this->connection->prepare('DELETE FROM favoritos WHERE vacante_id=:v AND candidato_id=:c');
+        }else{
+            $stmt=$this->connection->prepare('INSERT INTO favoritos (vacante_id,candidato_id) VALUES (:v,:c)');
         }
+        $stmt->execute(['v'=>$vacanteId,'c'=>$candidatoId]);
     }
 
-    public function postulacionesCandidato(int $candidatoId): array
+    public function favoritasCandidato(int $candidatoId): array
     {
-        $sql = 'SELECT p.id, p.estado, p.fecha_postulacion, v.puesto, v.ubicacion, u.nombre AS empresa
-                FROM postulaciones p
-                INNER JOIN vacantes v ON v.id = p.vacante_id
-                INNER JOIN usuarios u ON u.id = v.empresa_id
-                WHERE p.candidato_id = :candidato_id
-                ORDER BY p.fecha_postulacion DESC';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute(['candidato_id' => $candidatoId]);
-        return $stmt->fetchAll();
+        $stmt=$this->connection->prepare("SELECT v.*,u.nombre empresa FROM favoritos f JOIN vacantes v ON v.id=f.vacante_id JOIN usuarios u ON u.id=v.empresa_id WHERE f.candidato_id=:id ORDER BY f.fecha_guardado DESC");
+        $stmt->execute(['id'=>$candidatoId]); return $stmt->fetchAll();
     }
 
-    public function candidatosEmpresa(int $empresaId): array
+    public function postulacionesCandidato(int $id): array
     {
-        $sql = 'SELECT p.id AS postulacion_id, p.estado, p.fecha_postulacion,
-                       v.puesto, u.nombre, u.correo, u.telefono,
-                       pc.profesion, pc.habilidades
-                FROM postulaciones p
-                INNER JOIN vacantes v ON v.id = p.vacante_id
-                INNER JOIN usuarios u ON u.id = p.candidato_id
-                INNER JOIN perfiles_candidato pc ON pc.usuario_id = u.id
-                WHERE v.empresa_id = :empresa_id
-                ORDER BY p.fecha_postulacion DESC';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute(['empresa_id' => $empresaId]);
-        return $stmt->fetchAll();
+        $stmt=$this->connection->prepare('SELECT p.id,p.estado,p.fecha_postulacion,p.mensaje,v.puesto,v.ubicacion,v.modalidad,u.nombre empresa FROM postulaciones p JOIN vacantes v ON v.id=p.vacante_id JOIN usuarios u ON u.id=v.empresa_id WHERE p.candidato_id=:id ORDER BY p.fecha_postulacion DESC');
+        $stmt->execute(['id'=>$id]); return $stmt->fetchAll();
     }
 
-    public function actualizarPostulacion(int $postulacionId, int $empresaId, string $estado): void
+    public function candidatosEmpresa(int $id): array
     {
-        $permitidos = ['En revisión', 'Aceptado', 'Rechazado'];
-        if (!in_array($estado, $permitidos, true)) {
-            return;
-        }
+        $stmt=$this->connection->prepare('SELECT p.id postulacion_id,p.estado,p.fecha_postulacion,p.mensaje,v.puesto,u.nombre,u.correo,u.telefono,pc.profesion,pc.habilidades,pc.ubicacion FROM postulaciones p JOIN vacantes v ON v.id=p.vacante_id JOIN usuarios u ON u.id=p.candidato_id JOIN perfiles_candidato pc ON pc.usuario_id=u.id WHERE v.empresa_id=:id ORDER BY p.fecha_postulacion DESC');
+        $stmt->execute(['id'=>$id]); return $stmt->fetchAll();
+    }
 
-        $sql = 'UPDATE postulaciones p
-                INNER JOIN vacantes v ON v.id = p.vacante_id
-                SET p.estado = :estado
-                WHERE p.id = :id AND v.empresa_id = :empresa_id';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([
-            'estado' => $estado,
-            'id' => $postulacionId,
-            'empresa_id' => $empresaId,
-        ]);
+    public function actualizarPostulacion(int $id,int $empresaId,string $estado): void
+    {
+        if(!in_array($estado,['En revisión','Entrevista','Aceptado','Rechazado'],true)) return;
+        $stmt=$this->connection->prepare('UPDATE postulaciones p JOIN vacantes v ON v.id=p.vacante_id SET p.estado=:estado WHERE p.id=:id AND v.empresa_id=:empresa');
+        $stmt->execute(['estado'=>$estado,'id'=>$id,'empresa'=>$empresaId]);
     }
 }
